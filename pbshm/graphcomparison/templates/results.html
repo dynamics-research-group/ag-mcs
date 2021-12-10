@@ -1,0 +1,16 @@
+{% extends "graphcomparison.html" %}
+{% block content %}
+
+<p> The structures compared were: {{ raw_name_list }} </p>
+<img src="data:image/png;base64,{{ img_result }}">
+<div style="clear:both;"></div>
+
+<body>
+{% for table in tables %}
+		{{titles[loop.index]}}
+		{{ table|safe }}
+{% endfor %}
+</body>
+
+
+{% endblock %}
