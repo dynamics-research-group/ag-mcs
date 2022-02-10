@@ -1,5 +1,3 @@
-{% extends "graphcomparison.html" %}
-{% block content %}
 
 <!-- <table>
 	<thead>
@@ -16,7 +14,7 @@
 	</tbody>
 </table> -->
 
-<form method="post">
+<!-- <form method="post">
 	<table>
 		<tr>
 			<td> Enter list of structures to compare: </td> <td> <input type="text" name="structure_list" /> </td>
@@ -24,6 +22,32 @@
 	</table>
 	<br>
 	<input class="button" type="submit" formaction="/graphcomparison/compare" value="Compare them!" />
-</form>
+</form> -->
 
+{% extends 'portal.html'%}
+{% block title %}Structures within population{% endblock %}
+{% block content %}
+<form method="post">
+	<div class="text-right">
+		<input class="btn btn-primary" type="submit" formaction='{{ url_for("graphcomparison.compare") }}' />
+	</div>
+	<table class="table table-borderless table-hover mt-2">
+		<thead class="bg-info text-white">
+			<tr>
+				<th scope="col"></th>
+				<th scope="col">Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in structures %}
+				<tr>
+					<td class="py-3">
+						<input type="checkbox" name="structure_selection" value='{{ item["name"] }}' />
+					</td>
+					<td class="font-weight-bold py-3">{{ item["name"] }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</form>
 {% endblock %}

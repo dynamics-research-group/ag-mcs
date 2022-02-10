@@ -1,16 +1,22 @@
 {% extends "graphcomparison.html" %}
 {% block content %}
-
-<p> The structures compared were: {{ raw_name_list }} </p>
-<img src="data:image/png;base64,{{ img_result }}">
-<div style="clear:both;"></div>
-
-<body>
-{% for table in tables %}
-		{{titles[loop.index]}}
-		{{ table|safe }}
-{% endfor %}
-</body>
-
-
+<div class="row">
+	<div class="col-12">
+		<p> The structures compared were: {% for name in name_list %}{% if loop.index > 1 %},{% endif %} {{ name }}{% endfor %}</p>
+	</div>
+	<div class="col-12 text-center">
+		<img class="p-4" src="data:image/png;base64,{{ img_result }}">
+		<div style="clear:both;"></div>
+	</div>
+	<div class="col-12 text-center pb-4">
+		{% for table in jaccard_index_table %}
+			{{ table|safe }}
+		{% endfor %}
+	</div>
+	<div class="col-12 text-center">
+		{% for table in nodes_in_mcs_table %}
+			{{ table|safe }}
+		{% endfor %}
+	</div>
+</div>
 {% endblock %}

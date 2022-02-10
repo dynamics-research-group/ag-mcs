@@ -45,15 +45,9 @@ def generate(population):
 def compare():
 	if request.method == "POST":
 		form = request.form
-		raw_name_list = form['structure_list']
-		name_list = []
-		for structure in re.split(",", raw_name_list):
-			name_list.append(structure.strip())
-		
+		name_list = form.getlist("structure_selection")
 		structure_list = []
-		print(name_list)
 		for name in name_list:
-			structure = {}
 			for document in structure_collection().aggregate([
 				{"$match": {
 					"name": name
@@ -69,11 +63,11 @@ def compare():
 
 		similarity_matrix, nodes_in_mcs = fh.create_distance_matrix(structure_list)
 
-		df = pd.DataFrame(data=similarity_matrix, index=name_list, columns=name_list).round(2)
-		df2 = pd.DataFrame(data=nodes_in_mcs, index=name_list, columns=name_list).astype(int)
+		jaccard_index_dataframe = pd.DataFrame(data=similarity_matrix, index=name_list, columns=name_list).round(2)
+		nodes_in_mcs_dataframe = pd.DataFrame(data=nodes_in_mcs, index=name_list, columns=name_list).astype(int)
 
 		plt.pyplot.switch_backend('Agg') 
-		sns_plot = sns.heatmap(df, annot=True, cmap="summer_r")
+		sns_plot = sns.heatmap(jaccard_index_dataframe, annot=True, cmap="summer_r")
 		fig = sns_plot.get_figure()
 
 		canvas=FigureCanvas(fig)
@@ -82,11 +76,11 @@ def compare():
 		img.seek(0)
 
 		img_byte = img.getvalue()
-		# send_file(img,mimetype='img/png')
 
 		return render_template("results.html", 
-							   raw_name_list=raw_name_list, 
+							   name_list=name_list, 
 							   img_result=base64.b64encode(img_byte).decode(),
-							   tables=[df2.to_html(classes='data')],
-							   titles=df.columns.values)
+							   nodes_in_mcs_table=[nodes_in_mcs_dataframe.to_html(classes='data')],
+							   jaccard_index_table=[jaccard_index_dataframe.to_html(classes='data')],
+							   titles=jaccard_index_dataframe.columns.values)
 	return redirect("/")
