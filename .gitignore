@@ -5,3 +5,5 @@ pbshm/static/
 pbshm/templates/
 pbshm/clock/
 pbshm/db.py
+pbshm/__pycache__/
+*.pyc
