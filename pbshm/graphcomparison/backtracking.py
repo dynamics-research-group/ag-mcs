@@ -43,7 +43,11 @@ def backtrack(graph1_attributed, graph2_attributed, solution_limit=10, filename=
 	len_best_solution = 0
 	solution_number = 0
 	# return list(backtrack_algorithm(G1_dash, G2_dash, G1, G2, m_initial, best))
-	with open('/Users/Julian/Documents/WorkDocuments/Irreducible Element/Random write/' + filename,'w') as f:
+	dir = os.path.dirname(__file__)
+	if not os.path.isdir(os.path.join(dir, 'results')):
+		os.mkdir(os.path.join(dir, 'results'))
+	filepath = os.path.join(dir, 'results', filename)
+	with open(filepath, 'w') as f:
 		f.write('MCS for graphs \n{0}\n{1}\n \n'.format(list(graph1.keys()), list(graph2.keys())))
 	return [solution[0] for solution in list(backtrack_algorithm(graph1_modified, graph2_modified, 
 												   				 graph1, graph2, 
@@ -75,7 +79,9 @@ def backtrack_algorithm(graph1_modified, graph2_modified,
 				# This new solution must exceed the current best estimate, update the best estimate
 				len_best_solution = len(current_solution)
 				if debug: print(f"Solution {solution_number}, length {len_best_solution}")
-				with open('/Users/Julian/Documents/WorkDocuments/Irreducible Element/Random write/' + filename,'a') as f:
+				dir = os.path.dirname(__file__)
+				filepath = os.path.join(dir, 'results', filename)
+				with open(filepath, 'a') as f:
 					f.write('Length {0} \n{1}\n \n'.format(len_best_solution, current_solution))
 				yield current_solution, len_best_solution, solution_number
 				break
@@ -141,7 +147,9 @@ def backtrack_algorithm_for(graph1_modified, graph2_modified,
 		# This new solution must exceed the current best estimate, update the best estimate
 	len_best_solution = len(current_solution)
 	print(len_best_solution)
-	with open('/Users/Julian/Documents/WorkDocuments/Irreducible Element/Random write/' + filename,'a') as f:
+	dir = os.path.dirname(__file__)
+	filepath = os.path.join(dir, 'results', filename)
+	with open(filepath, 'a') as f:
 		f.write('Length {0} \n{1}\n \n'.format(len_best_solution, current_solution))
 	yield current_solution, len_best_solution
 
