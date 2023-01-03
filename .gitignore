@@ -136,3 +136,6 @@ pbshm/pathfinder/
 pbshm/static/
 pbshm/templates/
 pbshm/db.py
+
+#Ignore results output
+pbshm/graphcomparison/results/
