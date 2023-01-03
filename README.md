@@ -1,5 +1,5 @@
 # Attributed Graph Maximum Common Subgraph (Jaccard)
-This is a [PBSHM Flask Core](/dynamics-research-group/pbshm-flask-core) module to generate a similarity score using the Jaccard Index and a maximum common subgraph. 
+This is a [PBSHM Flask Core](https://github.com/dynamics-research-group/pbshm-flask-core) module to generate a similarity score using the Jaccard Index and a maximum common subgraph. 
 
 The original author of this module is [Dr Julian Gosliga](https://github.com/jgosliga)
 
