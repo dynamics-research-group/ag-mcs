@@ -1,19 +1,22 @@
-{% extends "graphcomparison.html" %}
+{% extends 'portal.html'%}
+{% block title %}Graph comparison results{% endblock %}
 {% block content %}
 <div class="row">
+	<div class="col">
+		<p>The structures compared were: {% for name in name_list %}{% if loop.index > 1 %},{% endif %} {{ name }}{% endfor %}</p>
+	</div>
+</div>
+<div class="row">
 	<div class="col-12">
-		<p> The structures compared were: {% for name in name_list %}{% if loop.index > 1 %},{% endif %} {{ name }}{% endfor %}</p>
+		<h2>Heatmap</h2>
+		<img class="p-4 mx-auto" src="data:image/png;base64,{{ img_result }}">
 	</div>
-	<div class="col-12 text-center">
-		<img class="p-4" src="data:image/png;base64,{{ img_result }}">
-		<div style="clear:both;"></div>
-	</div>
-	<div class="col-12 text-center pb-4">
+	<div class="col-12">
+		<h2>Jaccard Index</h2>
 		{% for table in jaccard_index_table %}
 			{{ table|safe }}
 		{% endfor %}
-	</div>
-	<div class="col-12 text-center">
+		<h2>Nodes in MCS</h2>
 		{% for table in nodes_in_mcs_table %}
 			{{ table|safe }}
 		{% endfor %}
