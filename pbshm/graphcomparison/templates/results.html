@@ -3,23 +3,66 @@
 {% block content %}
 <div class="row">
 	<div class="col">
-		<p>The structures compared were: {% for name in name_list %}{% if loop.index > 1 %},{% endif %} {{ name }}{% endfor %}</p>
+		<p>The structures compared were: {% for name in original_structure_list %}{% if loop.index > 1 %},{% endif %} {{ name }}{% endfor %}</p>
 	</div>
 </div>
-<div class="row">
-	<div class="col-12">
-		<h2>Heatmap</h2>
-		<img class="p-4 mx-auto" src="data:image/png;base64,{{ img_result }}">
+
+<div class="card bg-dark text-white mb-3">
+	<div class="card-header">Heatmap</div>
+	<div class="card-body bg-white text-center">
+		<img class="p-4 mx-auto" width="60%" src="data:image/png;base64,{{ img_result }}">
 	</div>
-	<div class="col-12">
-		<h2>Jaccard Index</h2>
-		{% for table in jaccard_index_table %}
-			{{ table|safe }}
-		{% endfor %}
-		<h2>Nodes in MCS</h2>
-		{% for table in nodes_in_mcs_table %}
-			{{ table|safe }}
-		{% endfor %}
+</div>
+
+<div class="card bg-success text-white mb-3">
+	<div class="card-header">Jaccard Index Matrix</div>
+	<div class="card-body bg-white">
+		<table class="table table-borderless table-hover table-responsive">
+			<thead>
+				<tr>
+					<th scope="col"></th>
+					{% for original_name in original_structure_list %}
+						<th scope="col">{{ original_name }}</th>
+					{% endfor %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for j in range(comparison_structure_list|length) %}
+					<tr>
+						<td>{{ comparison_structure_list[j] }}</td>
+						{% for i in range(original_structure_list|length) %}
+							<td>{{ "{:.3f}".format(jaccard_index_matrix[i][j]) }}</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="card bg-info text-white mb-3">
+	<div class="card-header">Nodes in MCS Matrix</div>
+	<div class="card-body bg-white">
+		<table class="table table-borderless table-hover table-responsive">
+			<thead>
+				<tr>
+					<th scope="col"></th>
+					{% for original_name in original_structure_list %}
+						<th scope="col">{{ original_name }}</th>
+					{% endfor %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for j in range(comparison_structure_list|length) %}
+					<tr>
+						<td>{{ comparison_structure_list[j] }}</td>
+						{% for i in range(original_structure_list|length) %}
+							<td>{{ nodes_in_mcs_matrix[i][j] }}</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	</div>
 </div>
 {% endblock %}

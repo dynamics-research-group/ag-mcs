@@ -10,15 +10,32 @@
 			<tr>
 				<th scope="col"></th>
 				<th scope="col">Name</th>
+				<th scope="col">Population</th>
+				<th scope="col">Date</th>
+				<th scope="col">Elements</th>
+				<th scope="col">Relationships</th>
+				<th scope="col"></th>
 			</tr>
 		</thead>
 		<tbody>
-			{% for item in structures %}
+			{% for model in structures %}
 				<tr>
-					<td class="py-3">
-						<input type="checkbox" name="structure_selection" value='{{ item["name"] }}' />
+					<td class="p-3">
+						<input type="checkbox" name="structure_selection" value='{{ model["name"] }}' />
 					</td>
-					<td class="font-weight-bold py-3">{{ item["name"] }}</td>
+					<td class="font-weight-bold py-3">{{ model["name"] }}</td>
+					<td class="font-weight-bold py-3">{{ model["population"] }}</td>
+					<td class="font-weight-bold py-3">{{ model["date"] }}</td>
+					<td class="font-weight-bold py-3">{{ model["elements"] }}</td>
+					<td class="font-weight-bold py-3">{{ model["relationships"] }}</td>
+					<td class="p-2">
+						{% set structure_index = loop.index %}
+						<select name="structure_order_{{ model['name'] }}" class="form-control">
+							{% for i in range(structures|length) %}
+							<option value="{{ i }}" {{ "selected='selected" if structure_index - 1 == i else 'nope' }}>{{ i + 1 }}</option>
+							{% endfor %}
+						</select>
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
