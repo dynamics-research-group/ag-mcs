@@ -1,12 +1,32 @@
 import pbshm.graphcomparison.backtracking as bt
 import numpy as np
 from typing import List
+from enum import Enum
 
-def generate_attributed_graph_from_ie_model(pbshm_document: object) -> object:
+class ComparisonType(Enum):
+    Standard = 1
+    ContextualType = 2
+    GeometryType = 3
+    MaterialType = 4
+
+def flattern_type_tree(document: object) -> str:
+    if "type" not in document:
+        return None
+    child = flattern_type_tree(document["type"])
+    return f"{document['type']['name']} -> {child}" if child is not None else document["type"]["name"]
+
+def generate_attributed_graph_from_ie_model(pbshm_document: object, comparison_type: ComparisonType = ComparisonType.Standard) -> object:
     graph, attributes = {}, {}
     for element in pbshm_document["models"]["irreducibleElement"]["elements"]:
         graph[element["name"]] = []
-        attributes[element["name"]] = element["geometry"] if "geometry" in element else "n/a"
+        if comparison_type == ComparisonType.Standard:
+            attributes[element["name"]] = element["geometry"] if "geometry" in element else "n/a"
+        elif comparison_type == ComparisonType.ContextualType:
+            attributes[element["name"]] = element["contextual"]["type"] if "contextual" in element else "n/a"
+        elif comparison_type == ComparisonType.GeometryType:
+            attributes[element["name"]] = flattern_type_tree(element["geometry"]) if "geometry" in element else "n/a"
+        elif comparison_type == ComparisonType.MaterialType:
+            attributes[element["name"]] = flattern_type_tree(element["material"]) if "material" in element else "n/a"
     for relationship in pbshm_document["models"]["irreducibleElement"]["relationships"]:
         for element_1 in relationship["elements"]:
             for element_2 in relationship["elements"]:
@@ -19,12 +39,13 @@ def generate_attributed_graph_from_ie_model(pbshm_document: object) -> object:
         }
     }
 
-def create_similarity_matrix(original_structure_list: List[object], comparison_structure_list: List[object]) -> None:
+def create_similarity_matrix(original_structure_list: List[object], comparison_structure_list: List[object], comparison_type: ComparisonType = ComparisonType.Standard) -> None:
     #Convert both list to back tracking attributed graphs
+    print(f"Generating the similarity matrix using the comparison type: {comparison_type}")
     original_name_list = [document["name"] for document in original_structure_list]
     comparison_name_list = [document["name"] for document in comparison_structure_list]
-    original_attributed_graph_list = [generate_attributed_graph_from_ie_model(document) for document in original_structure_list]
-    comparison_attributed_graph_list = [generate_attributed_graph_from_ie_model(document) for document in comparison_structure_list]
+    original_attributed_graph_list = [generate_attributed_graph_from_ie_model(document, comparison_type) for document in original_structure_list]
+    comparison_attributed_graph_list = [generate_attributed_graph_from_ie_model(document, comparison_type) for document in comparison_structure_list]
     #Create Similarity Matrix
     original_graph_count, comparison_graph_count = len(original_attributed_graph_list), len(comparison_attributed_graph_list)
     comparison_counter, comparison_total = 0, original_graph_count * comparison_graph_count
