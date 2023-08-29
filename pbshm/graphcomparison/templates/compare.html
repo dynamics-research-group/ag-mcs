@@ -2,7 +2,12 @@
 {% block title %}Structures within population{% endblock %}
 {% block content %}
 <form method="post">
-	<div class="text-right">
+	<div class="d-flex justify-content-end">
+		<select name="comparison_type" class="form-control w-50 mr-3">
+			{% for comparison in comparison_types %}
+			<option value="{{ comparison.value }}">{{ comparison.name }}</option>
+			{% endfor %}
+		</select>
 		<input class="btn btn-primary" type="submit" formaction='{{ url_for("graphcomparison.compare") }}' />
 	</div>
 	<table class="table table-borderless table-hover mt-2">

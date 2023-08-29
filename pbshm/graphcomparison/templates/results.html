@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
 	<div class="col">
-		<p>The structures compared were: {% for name in original_structure_list %}{% if loop.index > 1 %},{% endif %} {{ name }}{% endfor %}</p>
+		<p>The structures compared were: {% for name in original_structure_list %}{% if loop.index > 1 %},{% endif %} {{ name }}{% endfor %} using the {{ comparison_type.name }} comparison type.</p>
 	</div>
 </div>
 
