@@ -1,0 +1,2 @@
+recursive-include pbshm *.html
+exclude pbshm/__init__.py

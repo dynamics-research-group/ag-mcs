@@ -1,0 +1,35 @@
+{% extends 'portal.html' %}
+{% block title %}IE Model Populations{% endblock %}
+{% block title_call_to_action %}
+    <a href='{{ url_for("graphcomparison.generate") }}' class="btn btn-outline-info">
+        Compare All
+    </a>
+{% endblock %}
+{% block content %}
+<table class="table table-borderless table-hover mt-2">
+    <thead>
+        <tr>
+            <th scope="col">Population name</th>
+            <th scope="col">Structure names</th>
+            <th scope="col">Structures</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in populations %}
+            <tr>
+                <td class="font-weight-bold py-3">{{ item["population_name"] }}</td>
+                <td class="py-3">
+                    {% for name in item["structure_names"] %}{{ "," if loop.index > 1}} {{ name }}{% endfor %}
+                </td>
+                <td class="py-3">{{ item["structure_names"] | length }}</td>
+                <td class="align-middle text-right">
+                    <a href='{{ url_for("graphcomparison.generate", population=item["population_name"])}}' class="btn btn-outline-info">
+                        Compare
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

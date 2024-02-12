@@ -1,14 +1,15 @@
+import base64
+import io
+import math
+
 from flask import Blueprint, render_template, request
-from pbshm.authentication.authentication import authenticate_request
-from pbshm.pathfinder.pathfinder import population_list
-from pbshm.db import structure_collection
-from pbshm.pathfinder.pathfinder import nanoseconds_since_epoch_to_datetime
-from pbshm.graphcomparison.matrix import ComparisonType, create_similarity_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
-import io
-import base64
-import math
+
+from pbshm.authentication import authenticate_request
+from pbshm.db import default_collection
+from pbshm.timekeeper import nanoseconds_since_epoch_to_datetime
+from pbshm.graphcomparison.matrix import ComparisonType, create_similarity_matrix
 
 #Create Blueprint
 bp = Blueprint("graphcomparison", __name__, template_folder="templates")
@@ -16,17 +17,35 @@ bp = Blueprint("graphcomparison", __name__, template_folder="templates")
 @bp.route("/list")
 @authenticate_request("graphcomparison-list")
 def list():
-	return population_list("graphcomparison.generate")
-
-@bp.route("/generate/<population>")
-@authenticate_request("graphcomparison-list-structures")
-def generate(population):
 	documents = []
-	for document in structure_collection().aggregate([
+	for document in default_collection().aggregate([
 		{"$match": {
-			"population": population, 
 			"models": {"$exists": True}
 		}},
+        {"$group":{
+            "_id": "$population",
+            "structure_names": {"$addToSet": "$name"}
+        }},
+        {"$project":{
+            "_id": 0,
+            "population_name": "$_id",
+            "structure_names": 1,
+        }},
+        {"$sort": {"population_name": 1}}
+	]):
+		documents.append(document)
+	return render_template("list-ie-models.html", populations=documents)
+
+@bp.route("/generate")
+@bp.route("/generate/<population>")
+@authenticate_request("graphcomparison-list-structures")
+def generate(population=None):
+	match_block = {"models": {"$exists": True}}
+	if population is not None:
+		match_block["population"] = population
+	documents = []
+	for document in default_collection().aggregate([
+		{"$match": match_block},
 		{"$project": {
 			"_id": 0,
 			"name": 1,
@@ -51,7 +70,7 @@ def compare():
 	#Load Models
 	structure_list = []
 	for name in sorted_name_list:
-		for document in structure_collection().aggregate([
+		for document in default_collection().aggregate([
 			{"$match": {
 				"name": name
 			}},
