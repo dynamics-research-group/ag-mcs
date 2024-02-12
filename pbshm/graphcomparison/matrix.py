@@ -1,7 +1,9 @@
-import pbshm.graphcomparison.backtracking as bt
-import numpy as np
-from typing import List
 from enum import Enum
+from typing import List
+
+import numpy as np
+
+import pbshm.graphcomparison.backtracking as bt
 
 class ComparisonType(Enum):
     Standard = 1

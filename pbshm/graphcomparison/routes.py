@@ -1,14 +1,16 @@
+import base64
+import io
+import math
+
 from flask import Blueprint, render_template, request
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 from pbshm.authentication import authenticate_request
 from pbshm.autostat import population_list
 from pbshm.db import default_collection
 from pbshm.timekeeper import nanoseconds_since_epoch_to_datetime
 from pbshm.graphcomparison.matrix import ComparisonType, create_similarity_matrix
-import matplotlib.pyplot as plt
-import seaborn as sns
-import io
-import base64
-import math
 
 #Create Blueprint
 bp = Blueprint("graphcomparison", __name__, template_folder="templates")
