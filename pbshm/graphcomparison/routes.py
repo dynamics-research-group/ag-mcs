@@ -36,15 +36,16 @@ def list():
 		documents.append(document)
 	return render_template("list-ie-models.html", populations=documents)
 
+@bp.route("/generate")
 @bp.route("/generate/<population>")
 @authenticate_request("graphcomparison-list-structures")
-def generate(population):
+def generate(population=None):
+	match_block = {"models": {"$exists": True}}
+	if population is not None:
+		match_block["population"] = population
 	documents = []
 	for document in default_collection().aggregate([
-		{"$match": {
-			"population": population, 
-			"models": {"$exists": True}
-		}},
+		{"$match": match_block},
 		{"$project": {
 			"_id": 0,
 			"name": 1,
