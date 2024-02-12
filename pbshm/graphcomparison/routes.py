@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request
 from pbshm.authentication import authenticate_request
 from pbshm.autostat import population_list
-from pbshm.db import structure_collection
+from pbshm.db import default_collection
 from pbshm.timekeeper import nanoseconds_since_epoch_to_datetime
 from pbshm.graphcomparison.matrix import ComparisonType, create_similarity_matrix
 import matplotlib.pyplot as plt
@@ -22,7 +22,7 @@ def list():
 @authenticate_request("graphcomparison-list-structures")
 def generate(population):
 	documents = []
-	for document in structure_collection().aggregate([
+	for document in default_collection().aggregate([
 		{"$match": {
 			"population": population, 
 			"models": {"$exists": True}
@@ -51,7 +51,7 @@ def compare():
 	#Load Models
 	structure_list = []
 	for name in sorted_name_list:
-		for document in structure_collection().aggregate([
+		for document in default_collection().aggregate([
 			{"$match": {
 				"name": name
 			}},
