@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from pbshm.authentication import authenticate_request
-from pbshm.autostat import population_list
 from pbshm.db import default_collection
 from pbshm.timekeeper import nanoseconds_since_epoch_to_datetime
 from pbshm.graphcomparison.matrix import ComparisonType, create_similarity_matrix
@@ -18,7 +17,24 @@ bp = Blueprint("graphcomparison", __name__, template_folder="templates")
 @bp.route("/list")
 @authenticate_request("graphcomparison-list")
 def list():
-	return population_list("graphcomparison.generate")
+	documents = []
+	for document in default_collection().aggregate([
+		{"$match": {
+			"models": {"$exists": True}
+		}},
+        {"$group":{
+            "_id": "$population",
+            "structure_names": {"$addToSet": "$name"}
+        }},
+        {"$project":{
+            "_id": 0,
+            "population_name": "$_id",
+            "structure_names": 1,
+        }},
+        {"$sort": {"population_name": 1}}
+	]):
+		documents.append(document)
+	return render_template("list-ie-models.html", populations=documents)
 
 @bp.route("/generate/<population>")
 @authenticate_request("graphcomparison-list-structures")
