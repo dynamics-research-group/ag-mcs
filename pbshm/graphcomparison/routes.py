@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request
-from pbshm.authentication.authentication import authenticate_request
-from pbshm.pathfinder.pathfinder import population_list
+from pbshm.authentication import authenticate_request
+from pbshm.autostat import population_list
 from pbshm.db import structure_collection
-from pbshm.pathfinder.pathfinder import nanoseconds_since_epoch_to_datetime
+from pbshm.timekeeper import nanoseconds_since_epoch_to_datetime
 from pbshm.graphcomparison.matrix import ComparisonType, create_similarity_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
