@@ -78,11 +78,6 @@ def create_app(test_config=None):
             "path": ["timekeeper", "__init__.py"],
             "blueprint": True,
             "url_prefix": "/timekeeper"
-        },
-        "pbshm.autostat": {
-            "path": ["autostat", "__init__.py"],
-            "blueprint": True,
-            "url_prefix": "/toolbox/autostat"
         }
     }
     for module_name in pbshm_modules:
