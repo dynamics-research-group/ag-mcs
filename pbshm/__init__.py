@@ -15,10 +15,10 @@ def create_app(test_config=None):
     app.config.from_mapping(
         PAGE_SUFFIX=" - PBSHM Debug & Development",
         LOGIN_MESSAGE="PBSHM Debug & Development Mode: Enter your authentication credentials below.",
-        FOOTER_MESSAGE="PBSHM Debug & Development - PBSHM Graph Comparison",
+        FOOTER_MESSAGE="PBSHM Debug & Development - PBSHM Graph Comparison (MCS)",
         NAVIGATION={
             "modules":{
-                "Graph Comparison" : "graphcomparison.list",
+                "Graph Comparison (MCS)" : "graphcomparison.list",
                 "Help": "layout.home"
             }
         }
@@ -89,9 +89,9 @@ def create_app(test_config=None):
         if pbshm_modules[module_name]["blueprint"]:
             app.register_blueprint(module.bp, url_prefix=pbshm_modules[module_name]["url_prefix"])
 
-    #Include Developing Module: Auto Stat
+    #Include Developing Module: Graph Comparison
     from pbshm import graphcomparison # Note: Must be done after the core modules are loaded in otherwise any references to core modules will fail
-    app.register_blueprint(graphcomparison.bp, url_prefix="/network/graph-comparison")
+    app.register_blueprint(graphcomparison.bp, url_prefix="/network/mcs")
     
     #Set Root Page
     app.add_url_rule("/", endpoint="graphcomparison.list")
