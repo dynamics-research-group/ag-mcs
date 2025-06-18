@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pbshm-network-mcs"
-version = "0.1"
+version = "0.1.1"
 authors = [
     { name = "Julian Gosliga"}
 ]
@@ -21,10 +21,10 @@ classifiers = [
 ]
 requires-python = ">=3.8.10"
 dependencies = [
-    "pbshm-core >= 1.1.2",
-    "numpy == 1.24.1",
-    "seaborn == 0.12.2",
-    "matplotlib == 3.6.2"
+    "pbshm-core == 1.1.6",
+    "numpy == 2.3.0",
+    "seaborn == 0.13.2",
+    "matplotlib == 3.10.3"
 ]
 
 [project.urls]
